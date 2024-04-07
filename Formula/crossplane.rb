@@ -26,7 +26,7 @@ class Crossplane < Formula
   end
 
   def install
-    bin.install 'crossplane'
+    bin.install 'crank' => 'crossplane'
   end
 
   test do
