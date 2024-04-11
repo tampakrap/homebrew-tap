@@ -2,7 +2,7 @@ class Crossplane < Formula
   desc 'The official Crossplane CLI'
   homepage 'https://crossplane.io'
   version 'v1.15.2'
-  license '???'
+  license 'Apache-2.0'
 
   if OS.mac? && Hardware::CPU.intel?
     url 'https://releases.crossplane.io/stable/v1.15.2/bin/darwin_amd64/crank'
