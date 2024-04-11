@@ -1,0 +1,23 @@
+name: Bump Crossplane Formula
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: 'New version (example: v0.14.0)'
+        required: true
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Bump crossplane formula versions
+        run: bin/bump-formula-crossplane.sh -v ${{ github.event.inputs.new_version }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "feat(Formula/crossplane.rb): Bump to version `${{ github.event.inputs.new_version }}`"
+          title: "feat(Formula/crossplane.rb): Bump to version `${{ github.event.inputs.new_version }}`"
+          body: ""
