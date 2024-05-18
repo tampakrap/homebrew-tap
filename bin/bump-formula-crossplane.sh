@@ -57,7 +57,7 @@ else
 fi
 
 if [[ $PRINT_FORMULA_FILE ]]; then
-    echo $FORMULA_FILE
+    echo "$FORMULA_FILE"
     exit
 fi
 
