@@ -1,4 +1,4 @@
-class Crossplane < Formula
+class CrossplaneAT115 < Formula
   desc 'The official Crossplane CLI'
   homepage 'https://crossplane.io'
   version 'v1.15.3'
