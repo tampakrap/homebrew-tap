@@ -22,6 +22,7 @@ if [[ -n $1 ]] && [[ $1 != "-"* ]]; then
     help 1
 fi
 
+CROSSPLANE_LATEST_VERSION="1.16"
 ARCHS=(
     darwin_amd64
     darwin_arm64
@@ -46,19 +47,24 @@ if [ -z ${BASH_REMATCH[1]} ]; then
     exit 1
 fi
 
-OLD_VERSION=$(grep version Formula/crossplane.rb | cut -d"'" -f2)
+CROSSPLANE_MAJOR_MINOR_VERSION="${BASH_REMATCH[1]%.*}"
+if [[ $CROSSPLANE_MAJOR_MINOR_VERSION == "$CROSSPLANE_LATEST_VERSION" ]]; then
+    FORMULA_FILE="Formula/crossplane.rb"
+else
+    FORMULA_FILE="Formula/crossplane@${CROSSPLANE_MAJOR_MINOR_VERSION}.rb"
+fi
+OLD_VERSION=$(grep version "$FORMULA_FILE" | cut -d"'" -f2)
 
 echo "INFO: Old version: $OLD_VERSION"
 echo "INFO: New version: $NEW_VERSION"
-
-echo "INFO: crossplane.rb: Setting new version"
-sed -i -e "s/$OLD_VERSION/$NEW_VERSION/g" Formula/crossplane.rb
-echo "INFO: crossplane.rb: New version set"
+echo "INFO: ${FORMULA_FILE}: Setting new version"
+sed -i -e "s/$OLD_VERSION/$NEW_VERSION/g" "$FORMULA_FILE"
+echo "INFO: ${FORMULA_FILE}: New version set"
 
 for arch in ${ARCHS[@]}; do
     echo "INFO: $arch: Calculating checksum"
     NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bin/$arch/crank" | sha256sum | cut -d" " -f1)
-    OLD_SHA256=$(grep -A1 "${arch}/" Formula/crossplane.rb | grep sha256 | cut -d"'" -f2)
-    sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" Formula/crossplane.rb
+    OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
+    sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
     echo "INFO: $arch: Checksum set successfully"
 done
