@@ -14,10 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Bump crossplane formula versions
-        run: bin/bump-formula-crossplane.sh -v ${{ github.event.inputs.new_version }}
+        id: bump_crossplane
+        run: |
+          bin/bump-formula-crossplane.sh -v ${{ github.event.inputs.new_version }}
+          echo "::set-output name=crossplane_formula_file::$(bin/bump-formula-crossplane.sh -v ${{ github.event.inputs.new_version }} -f)"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          commit-message: "feat(Formula/crossplane.rb): Bump to version `${{ github.event.inputs.new_version }}`"
-          title: "feat(Formula/crossplane.rb): Bump to version `${{ github.event.inputs.new_version }}`"
+          commit-message: "feat(${{ steps.bump_crossplane.outputs.crossplane_formula_file }}): Bump to version `${{ github.event.inputs.new_version }}`"
+          title: "feat(${{ steps.bump_crossplane.outputs.crossplane_formula_file }}): Bump to version `${{ github.event.inputs.new_version }}`"
           body: ""
