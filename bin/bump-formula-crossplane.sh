@@ -42,7 +42,7 @@ done
 
 [[ "${NEW_VERSION}" =~ $REGEX_VERSION ]]
 
-if [ -z ${BASH_REMATCH[1]} ]; then
+if [ -z "${BASH_REMATCH[1]}" ]; then
     echo "ERROR: The new version must be in the format vX.Y.Z"
     exit 1
 fi
@@ -61,7 +61,7 @@ echo "INFO: ${FORMULA_FILE}: Setting new version"
 sed -i -e "s/$OLD_VERSION/$NEW_VERSION/g" "$FORMULA_FILE"
 echo "INFO: ${FORMULA_FILE}: New version set"
 
-for arch in ${ARCHS[@]}; do
+for arch in "${ARCHS[@]}"; do
     echo "INFO: $arch: Calculating checksum"
     NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bin/$arch/crank" | sha256sum | cut -d" " -f1)
     OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
