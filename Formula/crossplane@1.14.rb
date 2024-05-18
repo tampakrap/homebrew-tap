@@ -1,28 +1,28 @@
 class Crossplane < Formula
   desc 'The official Crossplane CLI'
   homepage 'https://crossplane.io'
-  version 'v1.14.8'
+  version 'v1.14.9'
   license 'Apache-2.0'
 
   if OS.mac? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.14.8/bin/darwin_amd64/crank'
-    sha256 '5282642d45f2832e7bb1f72c742f63ad31af514ce8d11cca0dc34908bdf93f40'
+    url 'https://releases.crossplane.io/stable/v1.14.9/bin/darwin_amd64/crank'
+    sha256 '058c5b49313ff3c47f10756a2c95310a7712e2b76c0c0b51b3b777fc6d579fe2'
   end
   if OS.mac? && Hardware::CPU.arm?
-    url 'https://releases.crossplane.io/stable/v1.14.8/bin/darwin_arm64/crank'
-    sha256 '9da5d67d6e33e6e5834b0a25fd7bec453a016d13eecfec21cc3a7102176a6092'
+    url 'https://releases.crossplane.io/stable/v1.14.9/bin/darwin_arm64/crank'
+    sha256 'f3d99208310749c92f732a1fe24436b1268b3fa32cfe97dca85d52194774e777'
   end
   if OS.linux? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.14.8/bin/linux_amd64/crank'
-    sha256 'fb5484847a484cd3f365d2ba2f1b75ab93434f7f3e560236b57d9dda175bcdc0'
+    url 'https://releases.crossplane.io/stable/v1.14.9/bin/linux_amd64/crank'
+    sha256 'bd429f94668eb65dba6cf2e9967667bb920e2b32e7da327047c1d26ddddc51ba'
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.14.8/bin/linux_arm/crank'
-    sha256 '606c9e108e284a42f27c2d90763fb02b10d137d4772c1fb3f81ca01920e6b1d5'
+    url 'https://releases.crossplane.io/stable/v1.14.9/bin/linux_arm/crank'
+    sha256 'ff9196929a270a1a1b6e78f418e57fa379e5500d4efc4dbfb1384e3ecce922dd'
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.14.8/bin/linux_arm64/crank'
-    sha256 '152eb71a0d789d6d264b2148c390c51d77131f530421ff9128391fc9be4853a2'
+    url 'https://releases.crossplane.io/stable/v1.14.9/bin/linux_arm64/crank'
+    sha256 '85c9574fb4e9890bafe83ebba475cef41d48e40aaaba93dcfd67ed569b4810cf'
   end
 
   def install
