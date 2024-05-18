@@ -6,6 +6,7 @@ Updates the Formula/crossplane.rb file with the new binaries and checksums.
 
 Required Arguments:
 -v <NEW_VERSION>  The new version of the crossplane/crank binaries. It must be in the format vX.Y.Z
+-f                Print the affected formula file and exit.
 
 Optional Arguments:
 -h --help         Show this help message.
@@ -32,9 +33,10 @@ ARCHS=(
 )
 REGEX_VERSION='v([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+)'
 
-while getopts v:h arg; do
+while getopts v:fh arg; do
     case ${arg} in
         v) NEW_VERSION=$OPTARG ;;
+        f) PRINT_FORMULA_FILE=1 ;;
         h) help ;;
         *) help 1 ;;
     esac
@@ -53,6 +55,12 @@ if [[ $CROSSPLANE_MAJOR_MINOR_VERSION == "$CROSSPLANE_LATEST_VERSION" ]]; then
 else
     FORMULA_FILE="Formula/crossplane@${CROSSPLANE_MAJOR_MINOR_VERSION}.rb"
 fi
+
+if [[ $PRINT_FORMULA_FILE ]]; then
+    echo $FORMULA_FILE
+    exit
+fi
+
 OLD_VERSION=$(grep version "$FORMULA_FILE" | cut -d"'" -f2)
 
 echo "INFO: Old version: $OLD_VERSION"
