@@ -30,6 +30,6 @@ class CrossplaneAT115 < Formula
   end
 
   test do
-    system "#{bin}/crossplane -v"
+    system "#{bin}/crossplane version --client"
   end
 end
