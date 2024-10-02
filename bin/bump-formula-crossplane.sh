@@ -61,7 +61,7 @@ if [[ $PRINT_FORMULA_FILE ]]; then
     exit
 fi
 
-OLD_VERSION=$(grep version "$FORMULA_FILE" | cut -d"'" -f2)
+OLD_VERSION=$(grep "^  version " "$FORMULA_FILE" | cut -d"'" -f2)
 
 echo "INFO: Old version: $OLD_VERSION"
 echo "INFO: New version: $NEW_VERSION"
