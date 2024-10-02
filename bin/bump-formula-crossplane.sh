@@ -23,7 +23,7 @@ if [[ -n $1 ]] && [[ $1 != "-"* ]]; then
     help 1
 fi
 
-CROSSPLANE_LATEST_VERSION="1.16"
+CROSSPLANE_LATEST_VERSION="1.17"
 ARCHS=(
     darwin_amd64
     darwin_arm64
