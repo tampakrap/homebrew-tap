@@ -56,6 +56,11 @@ else
     FORMULA_FILE="Formula/crossplane@${CROSSPLANE_MAJOR_MINOR_VERSION}.rb"
 fi
 
+if [[ ! -f $FORMULA_FILE ]]; then
+    echo "ERROR: $FORMULA_FILE File not found"
+    exit 1
+fi
+
 if [[ $PRINT_FORMULA_FILE ]]; then
     echo "$FORMULA_FILE"
     exit
