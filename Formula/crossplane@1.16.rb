@@ -1,28 +1,28 @@
 class CrossplaneAT116 < Formula
   desc 'The official Crossplane CLI'
   homepage 'https://crossplane.io'
-  version 'v1.16.0'
+  version 'v1.16.3'
   license 'Apache-2.0'
 
   if OS.mac? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.16.0/bin/darwin_amd64/crank'
-    sha256 'e78e4b1c82934067b3c6fba03b3e6574c6f9e23854694273b280c04dc2de9574'
+    url 'https://releases.crossplane.io/stable/v1.16.3/bin/darwin_amd64/crank'
+    sha256 'e346641a1ba2bce2fc679a5565c13962c3725deee86c52462e4b909296720245'
   end
   if OS.mac? && Hardware::CPU.arm?
-    url 'https://releases.crossplane.io/stable/v1.16.0/bin/darwin_arm64/crank'
-    sha256 '21e84fbd34a10af8fd9766049d1ca18ea7bc5cc5f62ce81e802e16d0a2d0987f'
+    url 'https://releases.crossplane.io/stable/v1.16.3/bin/darwin_arm64/crank'
+    sha256 'ead0cf7c865c713432a3490bca4592663647d6d58251b1f3fa69daa33aabf7eb'
   end
   if OS.linux? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.16.0/bin/linux_amd64/crank'
-    sha256 'd81655071af89f34cadb07b09a081412bbb82d5a959f4e1e4ab32e8a50ae1843'
+    url 'https://releases.crossplane.io/stable/v1.16.3/bin/linux_amd64/crank'
+    sha256 '89b0e81fa95076fefe519e2788502a1c03b3064eedeebd35a8c62d38070ee9fd'
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.16.0/bin/linux_arm/crank'
-    sha256 '7aea42f6f065602246be381d6c34e05e217bf3b9de3fae45d6c445f60eecf88c'
+    url 'https://releases.crossplane.io/stable/v1.16.3/bin/linux_arm/crank'
+    sha256 '8c58d4e520e5faf16e4b7cd959c0e7754805f5ab055d9721f86041188d003329'
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.16.0/bin/linux_arm64/crank'
-    sha256 'a3c77e77f89908089289f4920af9dfed3a27180c6c0fe9decccd9fc373f835c1'
+    url 'https://releases.crossplane.io/stable/v1.16.3/bin/linux_arm64/crank'
+    sha256 'cd77f50df091ffba7eebd3271db43183ade2cd9d622793782d3662c0bc107836'
   end
 
   def install
