@@ -1,0 +1,35 @@
+class Crossplane < Formula
+  desc 'The official Crossplane CLI'
+  homepage 'https://crossplane.io'
+  version 'UNSET'
+  license 'Apache-2.0'
+
+  if OS.mac? && Hardware::CPU.intel?
+    url 'https://releases.crossplane.io/stable/UNSET/bin/darwin_amd64/crank'
+    sha256 'EMPTY'
+  end
+  if OS.mac? && Hardware::CPU.arm?
+    url 'https://releases.crossplane.io/stable/UNSET/bin/darwin_arm64/crank'
+    sha256 'EMPTY'
+  end
+  if OS.linux? && Hardware::CPU.intel?
+    url 'https://releases.crossplane.io/stable/UNSET/bin/linux_amd64/crank'
+    sha256 'EMPTY'
+  end
+  if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
+    url 'https://releases.crossplane.io/stable/UNSET/bin/linux_arm/crank'
+    sha256 'EMPTY'
+  end
+  if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+    url 'https://releases.crossplane.io/stable/UNSET/bin/linux_arm64/crank'
+    sha256 'EMPTY'
+  end
+
+  def install
+    bin.install 'crank' => 'crossplane'
+  end
+
+  test do
+    system "#{bin}/crossplane version --client"
+  end
+end

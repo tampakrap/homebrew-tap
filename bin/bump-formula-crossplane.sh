@@ -23,7 +23,7 @@ if [[ -n $1 ]] && [[ $1 != "-"* ]]; then
     help 1
 fi
 
-CROSSPLANE_LATEST_VERSION="1.17"
+CROSSPLANE_LATEST_VERSION="1.19"
 ARCHS=(
     darwin_amd64
     darwin_arm64
@@ -57,8 +57,10 @@ else
 fi
 
 if [[ ! -f $FORMULA_FILE ]]; then
-    echo "ERROR: $FORMULA_FILE File not found"
-    exit 1
+    echo "WARNING: ${FORMULA_FILE}: File not found, creating"
+    cp empty $FORMULA_FILE
+    sed -i -e "s#\(class Crossplane\)#\1AT${CROSSPLANE_MAJOR_MINOR_VERSION//.}#" $FORMULA_FILE
+    echo "INFO: ${FORMULA_FILE}: Created"
 fi
 
 if [[ $PRINT_FORMULA_FILE ]]; then
@@ -70,14 +72,28 @@ OLD_VERSION=$(grep "^  version " "$FORMULA_FILE" | cut -d"'" -f2)
 
 echo "INFO: Old version: $OLD_VERSION"
 echo "INFO: New version: $NEW_VERSION"
+if [[ $OLD_VERSION == $NEW_VERSION ]]; then
+    echo "INFO: Nothing to do, exiting"
+    exit
+fi
 echo "INFO: ${FORMULA_FILE}: Setting new version"
 sed -i -e "s/$OLD_VERSION/$NEW_VERSION/g" "$FORMULA_FILE"
 echo "INFO: ${FORMULA_FILE}: New version set"
 
-for arch in "${ARCHS[@]}"; do
-    echo "INFO: $arch: Calculating checksum"
-    NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bin/$arch/crank" | sha256sum | head -c 64)
-    OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
-    sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
-    echo "INFO: $arch: Checksum set successfully"
-done
+if (( $(echo "$CROSSPLANE_MAJOR_MINOR_VERSION >= 1.18" | bc -l) )); then
+    for arch in "${ARCHS[@]}"; do
+        echo "INFO: $arch: Getting checksum"
+        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bin/$arch/crank.sha256")
+        OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
+        sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
+        echo "INFO: $arch: Checksum set successfully"
+    done
+else
+    for arch in "${ARCHS[@]}"; do
+        echo "INFO: $arch: Calculating checksum"
+        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bin/$arch/crank" | sha256sum | head -c 64)
+        OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
+        sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
+        echo "INFO: $arch: Checksum set successfully"
+    done
+fi
