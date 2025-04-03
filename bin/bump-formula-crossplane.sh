@@ -58,8 +58,8 @@ fi
 
 if [[ ! -f $FORMULA_FILE ]]; then
     echo "WARNING: ${FORMULA_FILE}: File not found, creating"
-    cp empty $FORMULA_FILE
-    sed -i -e "s#\(class Crossplane\)#\1AT${CROSSPLANE_MAJOR_MINOR_VERSION//.}#" $FORMULA_FILE
+    cp empty "$FORMULA_FILE"
+    sed -i -e "s#\(class Crossplane\)#\1AT${CROSSPLANE_MAJOR_MINOR_VERSION//.}#" "$FORMULA_FILE"
     echo "INFO: ${FORMULA_FILE}: Created"
 fi
 
@@ -72,7 +72,7 @@ OLD_VERSION=$(grep "^  version " "$FORMULA_FILE" | cut -d"'" -f2)
 
 echo "INFO: Old version: $OLD_VERSION"
 echo "INFO: New version: $NEW_VERSION"
-if [[ $OLD_VERSION == $NEW_VERSION ]]; then
+if [[ $OLD_VERSION == "$NEW_VERSION" ]]; then
     echo "INFO: Nothing to do, exiting"
     exit
 fi
