@@ -6,23 +6,23 @@ class Crossplane < Formula
 
   if OS.mac? && Hardware::CPU.intel?
     url 'https://releases.crossplane.io/stable/UNSET/bin/darwin_amd64/crank'
-    sha256 'EMPTY'
+    sha256 'EMPTY1'
   end
   if OS.mac? && Hardware::CPU.arm?
     url 'https://releases.crossplane.io/stable/UNSET/bin/darwin_arm64/crank'
-    sha256 'EMPTY'
+    sha256 'EMPTY2'
   end
   if OS.linux? && Hardware::CPU.intel?
     url 'https://releases.crossplane.io/stable/UNSET/bin/linux_amd64/crank'
-    sha256 'EMPTY'
+    sha256 'EMPTY3'
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     url 'https://releases.crossplane.io/stable/UNSET/bin/linux_arm/crank'
-    sha256 'EMPTY'
+    sha256 'EMPTY4'
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     url 'https://releases.crossplane.io/stable/UNSET/bin/linux_arm64/crank'
-    sha256 'EMPTY'
+    sha256 'EMPTY5'
   end
 
   def install
