@@ -29,7 +29,7 @@ ARCHS=(
     linux_arm
     linux_arm64
 )
-REGEX_VERSION='v([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+)'
+REGEX_VERSION='([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+)'
 
 while getopts v:fh arg; do
     case ${arg} in
@@ -43,7 +43,7 @@ done
 [[ "${NEW_VERSION}" =~ $REGEX_VERSION ]]
 
 if [ -z "${BASH_REMATCH[1]}" ]; then
-    echo "ERROR: The new version must be in the format vX.Y.Z"
+    echo "ERROR: The new version must be in the format X.Y.Z"
     help 1
 fi
 
@@ -83,15 +83,15 @@ echo "INFO: ${FORMULA_FILE}: New version set"
 if (( $(echo "$CROSSPLANE_MAJOR_MINOR_VERSION >= 1.18" | bc -l) )); then
     for arch in "${ARCHS[@]}"; do
         echo "INFO: $arch: Getting checksum"
-        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bundle/$arch/crank.tar.gz.sha256")
-        OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
+        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v$NEW_VERSION/bundle/$arch/crank.tar.gz.sha256")
+        OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"\"" -f2)
         sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
         echo "INFO: $arch: Checksum set successfully"
     done
 else
     for arch in "${ARCHS[@]}"; do
         echo "INFO: $arch: Calculating checksum"
-        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bin/$arch/crank" | sha256sum | head -c 64)
+        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v$NEW_VERSION/bin/$arch/crank" | sha256sum | head -c 64)
         OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
         sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
         echo "INFO: $arch: Checksum set successfully"
