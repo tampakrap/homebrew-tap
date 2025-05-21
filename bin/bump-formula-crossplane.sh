@@ -12,9 +12,7 @@ Optional Arguments:
 -h --help         Show this help message.
 EOF
 
-    HELP_STATUS=$1
-    [[ -n $HELP_STATUS ]] || HELP_STATUS=0
-    exit "$HELP_STATUS"
+    exit "$1"
 }
 
 [[ -z $1 ]] && help 1
@@ -46,36 +44,38 @@ done
 
 if [ -z "${BASH_REMATCH[1]}" ]; then
     echo "ERROR: The new version must be in the format vX.Y.Z"
-    exit 1
+    help 1
 fi
 
 CROSSPLANE_MAJOR_MINOR_VERSION="${BASH_REMATCH[1]%.*}"
 if [[ $CROSSPLANE_MAJOR_MINOR_VERSION == "$CROSSPLANE_LATEST_VERSION" ]]; then
     FORMULA_FILE="Formula/crossplane.rb"
+    FORMULA_LATEST=1
 else
     FORMULA_FILE="Formula/crossplane@${CROSSPLANE_MAJOR_MINOR_VERSION}.rb"
 fi
 
-if [[ ! -f $FORMULA_FILE ]]; then
-    echo "WARNING: ${FORMULA_FILE}: File not found, creating"
-    cp empty "$FORMULA_FILE"
-    sed -i -e "s#\(class Crossplane\)#\1AT${CROSSPLANE_MAJOR_MINOR_VERSION//.}#" "$FORMULA_FILE"
-    echo "INFO: ${FORMULA_FILE}: Created"
-fi
-
-if [[ $PRINT_FORMULA_FILE ]]; then
+if [[ -n $PRINT_FORMULA_FILE ]]; then
     echo "$FORMULA_FILE"
     exit
 fi
 
-OLD_VERSION=$(grep "^  version " "$FORMULA_FILE" | cut -d"'" -f2)
-
-echo "INFO: Old version: $OLD_VERSION"
-echo "INFO: New version: $NEW_VERSION"
-if [[ $OLD_VERSION == "$NEW_VERSION" ]]; then
-    echo "INFO: Nothing to do, exiting"
-    exit
+if [[ -f $FORMULA_FILE ]]; then
+    OLD_VERSION=$(grep "^  version " "$FORMULA_FILE" | cut -d"'" -f2)
+    echo "INFO: Old version: $OLD_VERSION"
+    echo "INFO: New version: $NEW_VERSION"
+    if [[ $OLD_VERSION == "$NEW_VERSION" ]]; then
+        echo "INFO: Nothing to do, exiting"
+        exit
+    fi
+else
+    echo "WARNING: ${FORMULA_FILE}: File not found, creating"
+    cp empty "$FORMULA_FILE"
+    [[ -n $FORMULA_LATEST ]] || sed -i -e "s#\(class Crossplane\)#\1AT${CROSSPLANE_MAJOR_MINOR_VERSION//.}#" "$FORMULA_FILE"
+    OLD_VERSION="UNSET"
+    echo "INFO: ${FORMULA_FILE}: Created"
 fi
+
 echo "INFO: ${FORMULA_FILE}: Setting new version"
 sed -i -e "s/$OLD_VERSION/$NEW_VERSION/g" "$FORMULA_FILE"
 echo "INFO: ${FORMULA_FILE}: New version set"
@@ -83,7 +83,7 @@ echo "INFO: ${FORMULA_FILE}: New version set"
 if (( $(echo "$CROSSPLANE_MAJOR_MINOR_VERSION >= 1.18" | bc -l) )); then
     for arch in "${ARCHS[@]}"; do
         echo "INFO: $arch: Getting checksum"
-        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bin/$arch/crank.sha256")
+        NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/$NEW_VERSION/bundle/$arch/crank.tar.gz.sha256")
         OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
         sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
         echo "INFO: $arch: Checksum set successfully"

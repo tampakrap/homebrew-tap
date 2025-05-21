@@ -5,24 +5,24 @@ class Crossplane < Formula
   license 'Apache-2.0'
 
   if OS.mac? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.19.1/bin/darwin_amd64/crank'
-    sha256 'e90d4d3e2d3e7bdcb85427c6e833e71b15319f2d71daac8a5fa19a4660f52ab2'
+    url 'https://releases.crossplane.io/stable/v1.19.1/bundle/darwin_amd64/crank.tar.gz'
+    sha256 '0d0719bc8201dd5ec5adec900b6dd6937f03a09357d26af093472303c14c046f'
   end
   if OS.mac? && Hardware::CPU.arm?
-    url 'https://releases.crossplane.io/stable/v1.19.1/bin/darwin_arm64/crank'
-    sha256 '642f688dbe417322eb3411f7b29f2bd2a085ba73e7a525e998b7250e1d56303b'
+    url 'https://releases.crossplane.io/stable/v1.19.1/bundle/darwin_arm64/crank.tar.gz'
+    sha256 '9dd83e730ce8263254c244806ccf02cc142f98b64fc0283e8d2820042e1de396'
   end
   if OS.linux? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.19.1/bin/linux_amd64/crank'
-    sha256 '04b1a2e323d31b2ebd0a24faa0e0b4988ba41c0b84e3c6adcadcf6cd0b0ebbc6'
+    url 'https://releases.crossplane.io/stable/v1.19.1/bundle/linux_amd64/crank.tar.gz'
+    sha256 '14a7af3c86c2f5d299fea4ede51d2306a1f4b730fb8d0beb3ea50c54bd19ad26'
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.19.1/bin/linux_arm/crank'
-    sha256 'c4ef92bc23d3801843b552f69554b4ac8093cfb56c2a76652d8ca147b33cf5e8'
+    url 'https://releases.crossplane.io/stable/v1.19.1/bundle/linux_arm/crank.tar.gz'
+    sha256 'af72d4d8b0d72b3f2454dc684465651aadcf2f5b731786297952a4d7265d7a2a'
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.19.1/bin/linux_arm64/crank'
-    sha256 'f7bd213fbc6219891437a5930d3ebad6e265c2639c05b2888b868476a93c1257'
+    url 'https://releases.crossplane.io/stable/v1.19.1/bundle/linux_arm64/crank.tar.gz'
+    sha256 'f7d42f09bee1b97b21d7aefcc97c12d10a1d4a2dc9794752937ec86a6f792c3b'
   end
 
   def install

@@ -5,24 +5,24 @@ class CrossplaneAT118 < Formula
   license 'Apache-2.0'
 
   if OS.mac? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.18.4/bin/darwin_amd64/crank'
-    sha256 '89b960f5d632f8313953b0dfb81f87a6e9696b7d0a7543b01a36af960e862855'
+    url 'https://releases.crossplane.io/stable/v1.18.4/bundle/darwin_amd64/crank.tar.gz'
+    sha256 'ad3048b2df8b00d5f6b57f1d7b4e1b61da74c454fe3044eb3b185b8816a7a160'
   end
   if OS.mac? && Hardware::CPU.arm?
-    url 'https://releases.crossplane.io/stable/v1.18.4/bin/darwin_arm64/crank'
-    sha256 'fb104316decf1fcbe96912f178c7d06b75dd851eddb7d573cc582d91239ccb6d'
+    url 'https://releases.crossplane.io/stable/v1.18.4/bundle/darwin_arm64/crank.tar.gz'
+    sha256 '3811e166bfbfc200b240201b827fda9acdb2bb657ff057374e75958e72bdda05'
   end
   if OS.linux? && Hardware::CPU.intel?
-    url 'https://releases.crossplane.io/stable/v1.18.4/bin/linux_amd64/crank'
-    sha256 '76834afe3ed6baed05e36102e403f7faf25cc42ac3b7b380c82941cf17fdf8bc'
+    url 'https://releases.crossplane.io/stable/v1.18.4/bundle/linux_amd64/crank.tar.gz'
+    sha256 'e530aab83cce5c935624d27cb961493245be19771e0caf2d10711c8aceb9e5a5'
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.18.4/bin/linux_arm/crank'
-    sha256 '1220bc5f02e429eec91789048a58138b94ddaf6afe2a702d7c509928d93cb266'
+    url 'https://releases.crossplane.io/stable/v1.18.4/bundle/linux_arm/crank.tar.gz'
+    sha256 'd9a8bf3b095295a1ae0bc0e1a8a1a7a05668848eb7925cd139c808c44de21921'
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url 'https://releases.crossplane.io/stable/v1.18.4/bin/linux_arm64/crank'
-    sha256 '3d7a5e0599b9f023b6320bc3c8a6e2a16de326adecd0bb7074c8da2bae702f25'
+    url 'https://releases.crossplane.io/stable/v1.18.4/bundle/linux_arm64/crank.tar.gz'
+    sha256 'f0a073a3e4a688d238a66ef531d7e6e535a5d07a2416e3efaa4fbd601cb41dfb'
   end
 
   def install
