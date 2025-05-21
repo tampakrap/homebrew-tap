@@ -5,7 +5,7 @@ help() {
 Updates the Formula/crossplane.rb file with the new binaries and checksums.
 
 Required Arguments:
--v <NEW_VERSION>  The new version of the crossplane/crank binaries. It must be in the format vX.Y.Z
+-v <NEW_VERSION>  The new version of the crossplane/crank binaries. It must be in the format X.Y.Z
 -f                Print the affected formula file and exit.
 
 Optional Arguments:
@@ -21,7 +21,7 @@ if [[ -n $1 ]] && [[ $1 != "-"* ]]; then
     help 1
 fi
 
-CROSSPLANE_LATEST_VERSION="1.19"
+CROSSPLANE_LATEST_VERSION="1.20"
 ARCHS=(
     darwin_amd64
     darwin_arm64
@@ -92,7 +92,7 @@ else
     for arch in "${ARCHS[@]}"; do
         echo "INFO: $arch: Calculating checksum"
         NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v$NEW_VERSION/bin/$arch/crank" | sha256sum | head -c 64)
-        OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"'" -f2)
+        OLD_SHA256=$(grep -A1 "${arch}/" "$FORMULA_FILE" | grep sha256 | cut -d"\"" -f2)
         sed -i -e "s/$OLD_SHA256/$NEW_SHA256/" "$FORMULA_FILE"
         echo "INFO: $arch: Checksum set successfully"
     done

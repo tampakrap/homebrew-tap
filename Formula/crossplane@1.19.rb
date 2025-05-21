@@ -1,4 +1,4 @@
-class Crossplane < Formula
+class CrossplaneAT119 < Formula
   desc "Build control planes without needing to write code"
   homepage "https://crossplane.io"
   version "1.19.1"
