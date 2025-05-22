@@ -6,23 +6,23 @@ class Crossplane < Formula
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/darwin_amd64/crank.tar.gz"
-    sha256 "e5e1a42afc0829bea6ae3bf4cd2517aff0b11ed97fef18d58dfb189f502659f7"
+    sha256 "8c8874efef15b3eea2607c5e855be754a5227ca183e35d87bc70560b480f12ab"
   end
   if OS.mac? && Hardware::CPU.arm?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/darwin_arm64/crank.tar.gz"
-    sha256 "4455d48aa605fea54d2878a5ecfb92d828835a8d721b1f23e196595ba40114ac"
+    sha256 "d7df3c4b5b93221efef0aeb1ab5777ed2192cf7a33eb6ae219bbd679982959dd"
   end
   if OS.linux? && Hardware::CPU.intel?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/linux_amd64/crank.tar.gz"
-    sha256 "ef0ad93e8a363577b4e38de9f27e9789e98a6f34a9431f95e88f48e3d641c1a9"
+    sha256 "4eb4947b2b9db9c7c42d20f5e4f118d3a1fa36d5efaa6fb7b2673b594c77266e"
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/linux_arm/crank.tar.gz"
-    sha256 "638643d35fe6aa9f6d84e2eeb8106362e4884c870ae432c0e36dcfe90a13bbe2"
+    sha256 "e949c82ffeef8cf7f218947dcedd9a524517f8c7f0a7fedbc233751cc6373868"
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/linux_arm64/crank.tar.gz"
-    sha256 "cfea042d3a21d3facc87c317674dc27e21697d51c045f95ee4bc21648bde5835"
+    sha256 "5ded2271fee97bf498ddd0863df70b8a742742f29ff50f9da4b7531306542a25"
   end
 
   def install
