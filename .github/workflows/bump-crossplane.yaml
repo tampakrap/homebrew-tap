@@ -9,17 +9,17 @@ on:
 
 jobs:
   open-pr:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
       - name: Bump crossplane formula versions
         id: bump_crossplane
         run: |
           bin/bump-formula-crossplane.sh -v ${{ github.event.inputs.new_version }}
-          echo "crossplane_formula_file=$(bin/bump-formula-crossplane.sh -v ${{ github.event.inputs.new_version }} -f)" >> $GITHUB_OUTPUT
+          echo "crossplane_formula_file=$(bin/bump-formula-crossplane.sh -v ${{ github.event.inputs.new_version }} -f)" >> "$GITHUB_OUTPUT"
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@38e0b6e68b4c852a5500a94740f0e535e0d7ba54  # v4.2.4
         with:
           commit-message: "feat(${{ steps.bump_crossplane.outputs.crossplane_formula_file }}): Bump to version `${{ github.event.inputs.new_version }}`"
           title: "feat(${{ steps.bump_crossplane.outputs.crossplane_formula_file }}): Bump to version `${{ github.event.inputs.new_version }}`"

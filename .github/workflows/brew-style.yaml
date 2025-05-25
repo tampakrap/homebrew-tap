@@ -1,0 +1,27 @@
+name: Run brew style
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  brew-style:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Setup homebrew
+        id: set-homebrew
+        uses: Homebrew/actions/setup-homebrew@9db18afa3016668c5f7e0b5d65c4eed7c1c0739e
+      - name: Cache Homebrew Bundler RubyGems
+        id: cache
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+        with:
+          path: ${{ steps.set-homebrew.outputs.gems-path }}
+          key: ${{ runner.os }}-rubygems-${{ steps.set-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ runner.os }}-rubygems-
+      - name: Install Homebrew Bundler RubyGems
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: brew install-bundler-gems
+      - name: Run brew style
+        run: brew style .

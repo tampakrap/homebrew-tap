@@ -92,5 +92,5 @@ do
   echo "INFO: ${arch}: Getting checksum"
   NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v${NEW_VERSION}/bundle/${arch}/crank.tar.gz.sha256")
   sed -i -e "/${arch}\//{n;s/sha256 \"[^\"]*\"/sha256 \"${NEW_SHA256}\"/;}" "${FORMULA_FILE}"
-  echo "INFO: $arch: Checksum set successfully"
+  echo "INFO: ${arch}: Checksum set successfully"
 done
