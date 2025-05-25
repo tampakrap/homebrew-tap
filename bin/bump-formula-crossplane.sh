@@ -7,6 +7,7 @@ Updates the Formula/crossplane.rb file with the new binaries and checksums.
 Required Arguments:
 -v <NEW_VERSION>  The new version of the crossplane/crank binaries. It must be in the format X.Y.Z
 -f                Print the affected formula file and exit.
+-n                Print the affected formula name and exit.
 
 Optional Arguments:
 -h --help         Show this help message.
@@ -32,11 +33,12 @@ ARCHS=(
 )
 REGEX_VERSION='([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+)'
 
-while getopts v:fh arg
+while getopts v:fnh arg
 do
   case ${arg} in
     v) NEW_VERSION=${OPTARG} ;;
     f) PRINT_FORMULA_FILE=1 ;;
+    n) PRINT_FORMULA_NAME=1 ;;
     h) help ;;
     *) help 1 ;;
   esac
@@ -62,6 +64,12 @@ fi
 if [[ -n ${PRINT_FORMULA_FILE} ]]
 then
   echo "${FORMULA_FILE}"
+  exit
+fi
+
+if [[ -n ${PRINT_FORMULA_NAME} ]]
+then
+  basename "${FORMULA_FILE}" ".rb"
   exit
 fi
 
