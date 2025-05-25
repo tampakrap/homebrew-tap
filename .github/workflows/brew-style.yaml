@@ -2,10 +2,13 @@ name: Run brew style
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
-  brew-test:
-    runs-on: ubuntu-22.04
+  brew-style:
+    runs-on: ubuntu-24.04
     steps:
       - name: Setup homebrew
         id: set-homebrew
@@ -20,4 +23,5 @@ jobs:
       - name: Install Homebrew Bundler RubyGems
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install-bundler-gems
-      - run: brew style .
+      - name: Run brew style
+        run: brew style .
