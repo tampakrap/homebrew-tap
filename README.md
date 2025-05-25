@@ -8,7 +8,7 @@ A Homebrew [tap] for installing Crossplane tools.
 
     `crossplane` is the official Crossplane CLI
 
-    ```
+    ```bash
     brew install tampakrap/tap/crossplane
     ```
 
