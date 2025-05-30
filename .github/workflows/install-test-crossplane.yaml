@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - Formula/crossplane*.rb
+
 jobs:
   install-test-crossplane:
     strategy:
