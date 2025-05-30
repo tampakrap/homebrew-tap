@@ -28,3 +28,5 @@ jobs:
           draft: true
       - run: git status
       - run: gh pr ready
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
