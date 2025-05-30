@@ -26,7 +26,3 @@ jobs:
           body: ""
           branch: "create-pull-request/${{ github.event.inputs.new_version }}"
           draft: true
-      - run: git status
-      - run: gh pr ready
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
