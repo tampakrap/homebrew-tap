@@ -16,6 +16,11 @@ EOF
   exit "$1"
 }
 
+get_version() {
+  local formula=$1
+  sed -rn 's/^  version "([0-9\.]+)"$/\1/p' "${formula}"
+}
+
 set_formula_class() {
   local version=$1
   local formula=$2
@@ -29,7 +34,8 @@ then
   help 1
 fi
 
-LATEST_VERSION_FULL=$(sed -rn 's/^  version "([0-9\.]+)"$/\1/p' "Formula/crossplane.rb")
+FORMULA_FILE="Formula/crossplane.rb"
+LATEST_VERSION_FULL=$(get_version "${FORMULA_FILE}")
 LATEST_VERSION_MAJOR_MINOR=${LATEST_VERSION_FULL%.*}
 LATEST_VERSION_MAJOR=${LATEST_VERSION_MAJOR_MINOR%%.*}
 LATEST_VERSION_MINOR=${LATEST_VERSION_MAJOR_MINOR#*.}
@@ -41,7 +47,6 @@ ARCHS=(
   linux_arm64
 )
 REGEX_VERSION='([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+)'
-FORMULA_FILE="Formula/crossplane.rb"
 
 while getopts v:fnh arg
 do
@@ -97,7 +102,7 @@ fi
 
 if [[ -f ${FORMULA_FILE} ]]
 then
-  OLD_VERSION_FULL=$(sed -rn 's/^  version +"([0-9\.]+)".*/\1/p' "${FORMULA_FILE}")
+  OLD_VERSION_FULL=$(get_version "${FORMULA_FILE}")
   echo "INFO: Old version: ${OLD_VERSION_FULL}"
   echo "INFO: New version: ${NEW_VERSION_FULL}"
   if [[ ${OLD_VERSION_FULL} == "${NEW_VERSION_FULL}" ]]
