@@ -16,6 +16,12 @@ EOF
   exit "$1"
 }
 
+set_formula_class() {
+  local version=$1
+  local formula=$2
+  sed -i -e "s#\(class Crossplane\)#\1AT${version}#" "${formula}"
+}
+
 [[ -z $1 ]] && help 1
 [[ $1 == "--help" ]] && help
 if [[ -n $1 ]] && [[ $1 != "-"* ]]
@@ -23,7 +29,10 @@ then
   help 1
 fi
 
-CROSSPLANE_LATEST_VERSION="1.20"
+LATEST_VERSION_FULL=$(sed -rn 's/^  version "([0-9\.]+)"$/\1/p' "Formula/crossplane.rb")
+LATEST_VERSION_MAJOR_MINOR=${LATEST_VERSION_FULL%.*}
+LATEST_VERSION_MAJOR=${LATEST_VERSION_MAJOR_MINOR%%.*}
+LATEST_VERSION_MINOR=${LATEST_VERSION_MAJOR_MINOR#*.}
 ARCHS=(
   darwin_amd64
   darwin_arm64
@@ -32,11 +41,12 @@ ARCHS=(
   linux_arm64
 )
 REGEX_VERSION='([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+)'
+FORMULA_FILE="Formula/crossplane.rb"
 
 while getopts v:fnh arg
 do
   case ${arg} in
-    v) NEW_VERSION=${OPTARG} ;;
+    v) NEW_VERSION_FULL=${OPTARG} ;;
     f) PRINT_FORMULA_FILE=1 ;;
     n) PRINT_FORMULA_NAME=1 ;;
     h) help ;;
@@ -44,7 +54,7 @@ do
   esac
 done
 
-[[ "${NEW_VERSION}" =~ ${REGEX_VERSION} ]]
+[[ "${NEW_VERSION_FULL}" =~ ${REGEX_VERSION} ]]
 
 if [[ -z "${BASH_REMATCH[1]}" ]]
 then
@@ -52,13 +62,18 @@ then
   help 1
 fi
 
-CROSSPLANE_MAJOR_MINOR_VERSION="${BASH_REMATCH[1]%.*}"
-if [[ ${CROSSPLANE_MAJOR_MINOR_VERSION} == "${CROSSPLANE_LATEST_VERSION}" ]]
+NEW_VERSION_MAJOR_MINOR="${NEW_VERSION_FULL%.*}"
+NEW_VERSION_MAJOR="${NEW_VERSION_MAJOR_MINOR%%.*}"
+NEW_VERSION_MINOR="${NEW_VERSION_MAJOR_MINOR#*.}"
+if [[ ${NEW_VERSION_MAJOR_MINOR} == "${LATEST_VERSION_MAJOR_MINOR}" ]]
 then
-  FORMULA_FILE="Formula/crossplane.rb"
-  FORMULA_LATEST=1
+  USE_MAIN_FORMULA_FILE=1
+elif [[ ${NEW_VERSION_MAJOR} -gt "${LATEST_VERSION_MAJOR}" ]] || [[ ${NEW_VERSION_MINOR} -gt "${LATEST_VERSION_MINOR}" ]]
+then
+  NEW_LATEST_VERSION=1
+  USE_MAIN_FORMULA_FILE=1
 else
-  FORMULA_FILE="Formula/crossplane@${CROSSPLANE_MAJOR_MINOR_VERSION}.rb"
+  FORMULA_FILE="Formula/crossplane@${NEW_VERSION_MAJOR_MINOR}.rb"
 fi
 
 if [[ -n ${PRINT_FORMULA_FILE} ]]
@@ -73,12 +88,19 @@ then
   exit
 fi
 
+if [[ -n "${NEW_LATEST_VERSION}" ]]
+then
+  echo "INFO: Moving ${FORMULA_FILE} to Formula/crossplane@${LATEST_VERSION_MAJOR_MINOR}.rb"
+  mv "${FORMULA_FILE}" "Formula/crossplane@${LATEST_VERSION_MAJOR_MINOR}.rb"
+  set_formula_class "${LATEST_VERSION_MAJOR_MINOR//./}" "Formula/crossplane@${LATEST_VERSION_MAJOR_MINOR}.rb"
+fi
+
 if [[ -f ${FORMULA_FILE} ]]
 then
-  OLD_VERSION=$(sed -rn 's/^  version +"([0-9\.]+)".*/\1/p' "${FORMULA_FILE}")
-  echo "INFO: Old version: ${OLD_VERSION}"
-  echo "INFO: New version: ${NEW_VERSION}"
-  if [[ ${OLD_VERSION} == "${NEW_VERSION}" ]]
+  OLD_VERSION_FULL=$(sed -rn 's/^  version +"([0-9\.]+)".*/\1/p' "${FORMULA_FILE}")
+  echo "INFO: Old version: ${OLD_VERSION_FULL}"
+  echo "INFO: New version: ${NEW_VERSION_FULL}"
+  if [[ ${OLD_VERSION_FULL} == "${NEW_VERSION_FULL}" ]]
   then
     echo "INFO: Nothing to do, exiting"
     exit
@@ -86,19 +108,19 @@ then
 else
   echo "WARNING: ${FORMULA_FILE}: File not found, creating"
   cp empty "${FORMULA_FILE}"
-  [[ -n ${FORMULA_LATEST} ]] || sed -i -e "s#\(class Crossplane\)#\1AT${CROSSPLANE_MAJOR_MINOR_VERSION//./}#" "${FORMULA_FILE}"
-  OLD_VERSION="UNSET"
+  [[ -n ${USE_MAIN_FORMULA_FILE} ]] || set_formula_class "${NEW_VERSION_MAJOR_MINOR//./}" "${FORMULA_FILE}"
+  OLD_VERSION_FULL="UNSET"
   echo "INFO: ${FORMULA_FILE}: Created"
 fi
 
 echo "INFO: ${FORMULA_FILE}: Setting new version"
-sed -i -e "s/${OLD_VERSION}/${NEW_VERSION}/g" "${FORMULA_FILE}"
+sed -i -e "s/${OLD_VERSION_FULL}/${NEW_VERSION_FULL}/g" "${FORMULA_FILE}"
 echo "INFO: ${FORMULA_FILE}: New version set"
 
 for arch in "${ARCHS[@]}"
 do
   echo "INFO: ${arch}: Getting checksum"
-  NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v${NEW_VERSION}/bundle/${arch}/crank.tar.gz.sha256")
+  NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v${NEW_VERSION_FULL}/bundle/${arch}/crank.tar.gz.sha256")
   sed -i -e "/${arch}\//{n;s/sha256 \"[^\"]*\"/sha256 \"${NEW_SHA256}\"/;}" "${FORMULA_FILE}"
   echo "INFO: ${arch}: Checksum set successfully"
 done
