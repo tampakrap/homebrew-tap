@@ -6,22 +6,40 @@ on:
     branches:
       - main
 
+env:
+  HOMEBREW_NO_INSTALL_CLEANUP: True
+  HOMEBREW_DOWNLOADS: /home/runner/.cache/Homebrew/downloads
+  HOMEBREW_DOWNLOADS_CHECKSUM: 2e6bae48d897e7f405219ce2b5192fd8df3a848415998dc66c39b85663726721
+
 jobs:
   brew-style:
     runs-on: ubuntu-24.04
     steps:
       - name: Setup homebrew
-        id: set-homebrew
+        id: setup-homebrew
         uses: Homebrew/actions/setup-homebrew@9db18afa3016668c5f7e0b5d65c4eed7c1c0739e
       - name: Cache Homebrew Bundler RubyGems
-        id: cache
+        id: cache-rubygems
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
         with:
-          path: ${{ steps.set-homebrew.outputs.gems-path }}
-          key: ${{ runner.os }}-brew-style-rubygems-${{ steps.set-homebrew.outputs.gems-hash }}
+          path: ${{ steps.setup-homebrew.outputs.gems-path }}
+          key: ${{ runner.os }}-brew-style-rubygems-${{ steps.setup-homebrew.outputs.gems-hash }}
           restore-keys: ${{ runner.os }}-brew-style-rubygems-
       - name: Install Homebrew Bundler RubyGems
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache-rubygems.outputs.cache-hit != 'true'
         run: brew install-bundler-gems
+      - name: Cache Homebrew downloads
+        id: cache-downloads
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+        with:
+          path: ${{ env.HOMEBREW_DOWNLOADS }}
+          key: ${{ runner.os }}-brew-downloads-${{ env.HOMEBREW_DOWNLOADS_CHECKSUM }}
+          restore-keys: ${{ runner.os }}-brew-downloads-
       - name: Run brew style
         run: brew style .
+      - name: Check if the homebrew downloads dir checksum changed
+        run: |
+          new_homebrew_downloads_checksum=$(find "$HOMEBREW_DOWNLOADS" | sha256sum | head -c 64)
+          if [[ "$HOMEBREW_DOWNLOADS_CHECKSUM" != "$new_homebrew_downloads_checksum" ]]; then
+            echo "The homebrew downloads dir has a different checksum: $new_homebrew_downloads_checksum"
+          fi
