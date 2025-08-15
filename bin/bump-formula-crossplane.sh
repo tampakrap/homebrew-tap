@@ -67,12 +67,20 @@ then
   help 1
 fi
 
+# Check if the version exists
+if ! GH_PAGER="" gh release -R crossplane/crossplane view "v${NEW_VERSION_FULL}" >/dev/null 2>&1
+then
+  echo "ERROR: Version v${NEW_VERSION_FULL} was not found."
+  exit 1
+fi
+
 NEW_VERSION_MAJOR_MINOR="${NEW_VERSION_FULL%.*}"
 NEW_VERSION_MAJOR="${NEW_VERSION_MAJOR_MINOR%%.*}"
 NEW_VERSION_MINOR="${NEW_VERSION_MAJOR_MINOR#*.}"
 if [[ ${NEW_VERSION_MAJOR_MINOR} == "${LATEST_VERSION_MAJOR_MINOR}" ]]
 then
   USE_MAIN_FORMULA_FILE=1
+  OLD_VERSION_FULL="${LATEST_VERSION_FULL}"
 elif [[ ${NEW_VERSION_MAJOR} -gt "${LATEST_VERSION_MAJOR}" ]] || [[ ${NEW_VERSION_MINOR} -gt "${LATEST_VERSION_MINOR}" ]]
 then
   NEW_LATEST_VERSION=1
@@ -102,7 +110,7 @@ fi
 
 if [[ -f ${FORMULA_FILE} ]]
 then
-  OLD_VERSION_FULL=$(get_version "${FORMULA_FILE}")
+  [[ -n "${OLD_VERSION_FULL}" ]] || OLD_VERSION_FULL=$(get_version "${FORMULA_FILE}")
   echo "INFO: Old version: ${OLD_VERSION_FULL}"
   echo "INFO: New version: ${NEW_VERSION_FULL}"
   if [[ ${OLD_VERSION_FULL} == "${NEW_VERSION_FULL}" ]]
