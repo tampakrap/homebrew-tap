@@ -68,7 +68,7 @@ then
 fi
 
 # Check if the version exists
-if ! GH_PAGER="" gh release -R crossplane/crossplane view "v${NEW_VERSION_FULL}" > /dev/null 2>&1
+if ! GH_PAGER="" gh release -R crossplane/crossplane view "v${NEW_VERSION_FULL}" >/dev/null 2>&1
 then
   echo "ERROR: Version v${NEW_VERSION_FULL} was not found."
   exit 1
