@@ -79,13 +79,16 @@ NEW_VERSION_MAJOR="${NEW_VERSION_MAJOR_MINOR%%.*}"
 NEW_VERSION_MINOR="${NEW_VERSION_MAJOR_MINOR#*.}"
 if [[ ${NEW_VERSION_MAJOR_MINOR} == "${LATEST_VERSION_MAJOR_MINOR}" ]]
 then
+  # Patch bump of the latest version
   USE_MAIN_FORMULA_FILE=1
   OLD_VERSION_FULL="${LATEST_VERSION_FULL}"
-elif [[ ${NEW_VERSION_MAJOR} -gt "${LATEST_VERSION_MAJOR}" ]] || [[ ${NEW_VERSION_MINOR} -gt "${LATEST_VERSION_MINOR}" ]]
+elif [[ ${NEW_VERSION_MAJOR} -gt "${LATEST_VERSION_MAJOR}" ]] || { [[ ${NEW_VERSION_MAJOR} -eq "${LATEST_VERSION_MAJOR}" ]] && [[ ${NEW_VERSION_MINOR} -gt "${LATEST_VERSION_MINOR}" ]]; }
 then
+  # New latest version, either major or minor bump
   NEW_LATEST_VERSION=1
   USE_MAIN_FORMULA_FILE=1
 else
+  # Patch bump of a previous version
   FORMULA_FILE="Formula/crossplane@${NEW_VERSION_MAJOR_MINOR}.rb"
 fi
 
