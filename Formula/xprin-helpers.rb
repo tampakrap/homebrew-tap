@@ -1,28 +1,28 @@
 class XprinHelpers < Formula
   desc "Helper standalone tools used by xprin"
   homepage "https://github.com/crossplane-contrib/xprin/blob/main/docs/xprin-helpers.md"
-  version "0.1.0"
+  version "0.1.1"
   license "Apache-2.0"
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin-helpers_darwin_amd64.tar.gz"
-    sha256 "1ce754a61e8a5e5e694e5ba9da099815721a4ab64a0c0ddaeb4c179976c1e944"
+    sha256 "23873d4e0abab0e9487b7639cd6263b113962d59458b6edf1192ed9361a03ed9"
   end
   if OS.mac? && Hardware::CPU.arm?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin-helpers_darwin_arm64.tar.gz"
-    sha256 "fbfa4b1d689363c796a4f5ca50d3dfa7338aea94505d3988903b907ab06de102"
+    sha256 "360110b972604c2e4e9faf4a80ef3eea86d67372eb8246f84ab1ad8c5708e175"
   end
   if OS.linux? && Hardware::CPU.intel?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin-helpers_linux_amd64.tar.gz"
-    sha256 "c1910dab83c3f73dfcc5286259fdb75fb467d3504002fcdae1393be650ac476a"
+    sha256 "bcd452ae510c62e5ab0472c5959778ee4a0864c77a4c296753f421a715f9d3fd"
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin-helpers_linux_arm.tar.gz"
-    sha256 "0432a2f453c7c7e368c84889acd6792dbe87c4cbd77a5fcdf711f3bbee8813a1"
+    sha256 "15cfabd0a5468e40fb8531edec9f6786b916f70724cfc5fb3417721759626573"
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin-helpers_linux_arm64.tar.gz"
-    sha256 "f6f750f1dad8aa4a99d9c913574a29bc38eee44855bfaec98363b14af0d7a8a5"
+    sha256 "ef1c1c2eb1640f39fc5391e4d73031b7247acab37dccca4e8c067eb406addd79"
   end
 
   def install

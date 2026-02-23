@@ -68,7 +68,8 @@ then
   exit
 fi
 
-for pkg in xprin xprin-helpers; do
+for pkg in xprin xprin-helpers
+do
   FORMULA_FILE="Formula/${pkg}.rb"
   echo "INFO: ${FORMULA_FILE}: Setting new version"
   sed -i -e "s/${OLD_VERSION_FULL}/${NEW_VERSION_FULL}/g" "${FORMULA_FILE}"
