@@ -30,6 +30,6 @@ class Xprin < Formula
   end
 
   test do
-    system "#{bin}/xprin", "version"
+    assert_match "v#{version}", shell_output("#{bin}/xprin version")
   end
 end
