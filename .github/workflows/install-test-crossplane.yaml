@@ -6,33 +6,59 @@ on:
       - Formula/crossplane*.rb
 
 jobs:
-  install-test-crossplane:
-    strategy:
-      matrix:
-        os: [ubuntu-24.04, macos-15]
-    runs-on: ${{ matrix.os }}
+  get-changed-formulas:
+    runs-on: ubuntu-latest
+    outputs:
+      formulas: ${{ steps.formulas.outputs.formulas }}
+      any_changed: ${{ steps.changed-crossplane-formulas.outputs.any_changed }}
     steps:
-      - name: Setup homebrew
-        id: setup-homebrew
-        uses: Homebrew/actions/setup-homebrew@9db18afa3016668c5f7e0b5d65c4eed7c1c0739e
+      - uses: actions/checkout@v4
       - name: Get changed crossplane formulas
         id: changed-crossplane-formulas
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c  # v46.0.5
         with:
           files: "Formula/crossplane*.rb"
-      - name: List all changed crossplane formulas
-        id: list-changed-crossplane-formulas
-        if: steps.changed-crossplane-formulas.outputs.any_changed == 'true'
-        env:
-          ALL_CHANGED_CROSSPLANE_FORMULAS: ${{ steps.changed-crossplane-formulas.outputs.all_changed_files }}
+      - name: Set formulas JSON
+        id: formulas
         run: |
-          for formula in ${ALL_CHANGED_CROSSPLANE_FORMULAS}; do
-            echo "Formula $formula was changed"
-            crossplane_formula_name=$(basename "$formula" ".rb")
-            echo "crossplane_formula_name=$crossplane_formula_name" >> "$GITHUB_OUTPUT"
-          done
-      - name: Install the new crossplane formula version
-        run: brew install tampakrap/tap/${{ steps.list-changed-crossplane-formulas.outputs.crossplane_formula_name }}
+          if [ "$ANY_CHANGED" != "true" ]; then
+            echo 'formulas=[]' >> "$GITHUB_OUTPUT"
+          else
+            json="["
+            first=true
+            for f in $ALL_CHANGED_FILES; do
+              [ -z "$f" ] && continue
+              name=$(basename "$f" .rb)
+              if [ "$first" = true ]; then
+                json="$json\"$name\""
+                first=false
+              else
+                json="$json,\"$name\""
+              fi
+            done
+            json="$json]"
+            echo "formulas=$json" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          ANY_CHANGED: ${{ steps.changed-crossplane-formulas.outputs.any_changed }}
+          ALL_CHANGED_FILES: ${{ steps.changed-crossplane-formulas.outputs.all_changed_files }}
+
+  install-test-crossplane:
+    name: ${{ matrix.formula }} (${{ matrix.os }})
+    needs: get-changed-formulas
+    if: needs.get-changed-formulas.outputs.any_changed == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+        formula: ${{ fromJson(needs.get-changed-formulas.outputs.formulas) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup homebrew
+        id: setup-homebrew
+        uses: Homebrew/actions/setup-homebrew@9db18afa3016668c5f7e0b5d65c4eed7c1c0739e
+      - name: Install the formula
+        run: brew install tampakrap/tap/${{ matrix.formula }}
       - name: Cache Homebrew Bundler RubyGems
         id: cache-rubygems
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
@@ -43,6 +69,5 @@ jobs:
       - name: Install Homebrew Bundler RubyGems
         if: steps.cache-rubygems.outputs.cache-hit != 'true'
         run: brew install-bundler-gems
-      - name: Test the new crossplane formula version
-        run: brew test ${{ steps.list-changed-crossplane-formulas.outputs.crossplane_formula_name }}
-      - run: crossplane version --client
+      - name: Test the formula
+        run: brew test ${{ matrix.formula }}

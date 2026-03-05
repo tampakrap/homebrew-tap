@@ -30,6 +30,6 @@ class CrossplaneAT116 < Formula
   end
 
   test do
-    system "#{bin}/crossplane", "version", "--client"
+    assert_match "Client Version: v#{version}", shell_output("#{bin}/crossplane version --client")
   end
 end
