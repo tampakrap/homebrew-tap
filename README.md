@@ -19,7 +19,7 @@ A Homebrew [tap](https://docs.brew.sh/Taps) for installing Crossplane tools.
 - [xprin-helpers](https://github.com/crossplane-contrib/xprin/blob/main/docs/xprin-helpers.md): Helper standalone tools used by xprin
 
     ```bash
-    brew install tampakrap/tap/xprin
+    brew install tampakrap/tap/xprin-helpers
     ```
 
 [tap]: https://docs.brew.sh/Taps
