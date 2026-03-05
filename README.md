@@ -9,6 +9,7 @@ A Homebrew [tap](https://docs.brew.sh/Taps) for installing Crossplane tools.
     ```bash
     brew install tampakrap/tap/crossplane
     ```
+    Older versions are also offered.
 
 - [xprin](https://github.com/crossplane-contrib/xprin): a testing framework for Crossplane
 
@@ -21,6 +22,3 @@ A Homebrew [tap](https://docs.brew.sh/Taps) for installing Crossplane tools.
     ```bash
     brew install tampakrap/tap/xprin-helpers
     ```
-
-[tap]: https://docs.brew.sh/Taps
-[crossplane]: https://docs.crossplane.io/latest/cli/
