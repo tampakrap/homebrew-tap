@@ -1,28 +1,28 @@
 class Crossplane < Formula
   desc "Build control planes without needing to write code"
   homepage "https://crossplane.io"
-  version "2.2.0"
+  version "2.2.1"
   license "Apache-2.0"
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/darwin_amd64/crank.tar.gz"
-    sha256 "f1c8986cd9a90ccd9f9784567cfc8905e6c843c6ed845097a14471db1ef3d6c7"
+    sha256 "a600abd8990eef1464533c8e6db46313a30720a342a9f7785dd94fdbd6683f28"
   end
   if OS.mac? && Hardware::CPU.arm?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/darwin_arm64/crank.tar.gz"
-    sha256 "1ef028af4ad9ab59d810e63acdb67d0778d251db0e8a0615ad924145fd2bcb9a"
+    sha256 "2b52b3f669a310ca7d84c70cddcea996d9f4eb88abebfa2b291ec200d43b43b1"
   end
   if OS.linux? && Hardware::CPU.intel?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/linux_amd64/crank.tar.gz"
-    sha256 "482b6aafcf9d41e7eeaa14ace12f16ddf0d98059ad58929622bb8eeb7d35a3a1"
+    sha256 "34cbcc0d3fe30d1ad38c64eaac3e0231ec06006ba492bafca4c2bf93973e41e9"
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/linux_arm/crank.tar.gz"
-    sha256 "6e710da0349e029250d1a7d92d7596a68dce02d50d080c96bb922e63bfa41b14"
+    sha256 "802fc55ebfcba022af79fd40f249cfe0bd5e67eba43b1e11aecca8b73acefd3d"
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     url "https://releases.crossplane.io/stable/v#{version}/bundle/linux_arm64/crank.tar.gz"
-    sha256 "747e0312deeacb14d62f0888fca669e4bb4aed156d0cebc970c384e65a6f64e3"
+    sha256 "325f0c390da4d1d41bc38df4499b1b653905149135db95550da0a90e4814ef98"
   end
 
   def install
