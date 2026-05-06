@@ -1,28 +1,28 @@
 class Xprin < Formula
   desc "Testing framework for Crossplane"
   homepage "https://github.com/crossplane-contrib/xprin"
-  version "0.1.1"
+  version "0.2.0"
   license "Apache-2.0"
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin_darwin_amd64.tar.gz"
-    sha256 "ab640b364008363e584da1c7bd997006cac633b02a8a4632bc2f245cd8d25960"
+    sha256 "b3d9a806c1a6ec8306a585d594099a419e8b0d5a39b73d80551e4a8321a86cd2"
   end
   if OS.mac? && Hardware::CPU.arm?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin_darwin_arm64.tar.gz"
-    sha256 "3b2e27002c3c4dea2b464c8dd06b322fe8797c0f212d3b11b899f1db23e434af"
+    sha256 "bb149d618d473d12017cd8e12626ceb23fc409125af6cb4e7f520800cc5f5674"
   end
   if OS.linux? && Hardware::CPU.intel?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin_linux_amd64.tar.gz"
-    sha256 "c17e3cdb9011ad56853115c6378ccca3825616f292d6c8f1205ffedb87cdcf32"
+    sha256 "99e2fcf28e5868500c774eb043fea2cd2d0c96470fa239dfdd8a71a3519b1968"
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin_linux_arm.tar.gz"
-    sha256 "44fa546be4323c85f08ab24c2a770c50fd74abd259d913314be3ad2fa4f50cf7"
+    sha256 "04d28c4a912d0289fd57c5ba2d2547334fbd603d50760e8b0b7f64041664cbec"
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     url "https://github.com/crossplane-contrib/xprin/releases/download/v#{version}/xprin_linux_arm64.tar.gz"
-    sha256 "00feeba70b89fab1cb1358edf54150c76b432684a78ad8b3d55e4670704022d4"
+    sha256 "42483adef153ebd6eb0c845380f7126a5e3fce9cd5002d32a097408dc0da022e"
   end
 
   def install
