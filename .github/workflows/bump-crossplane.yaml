@@ -26,4 +26,4 @@ jobs:
           commit-message: "feat(${{ steps.bump_crossplane.outputs.crossplane_formula_file }}): Bump to version `${{ github.event.inputs.new_version }}`"
           title: "feat(${{ steps.bump_crossplane.outputs.crossplane_formula_file }}): Bump to version `${{ github.event.inputs.new_version }}`"
           body: ""
-          branch: "create-pull-request/${{ github.event.inputs.new_version }}"
+          branch: "create-pull-request/crossplane-${{ github.event.inputs.new_version }}"
