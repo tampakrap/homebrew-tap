@@ -26,4 +26,3 @@ jobs:
           title: "feat(Formula/xprin.rb): Bump to version `${{ github.event.inputs.new_version }}`"
           body: ""
           branch: "create-pull-request/${{ github.event.inputs.new_version }}"
-          draft: true
