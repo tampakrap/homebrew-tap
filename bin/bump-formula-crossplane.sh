@@ -5,7 +5,7 @@ help() {
 Updates the Formula/crossplane.rb file with the new binaries and checksums.
 
 Required Arguments:
--v <NEW_VERSION>  The new version of the crossplane/crank binaries. It must be in the format X.Y.Z
+-v <NEW_VERSION>  The new version of the crossplane/crossplane-cli binaries. It must be in the format X.Y.Z
 -f                Print the affected formula file and exit.
 -n                Print the affected formula name and exit.
 
@@ -68,7 +68,7 @@ then
 fi
 
 # Check if the version exists
-if ! GH_PAGER="" gh release -R crossplane/crossplane view "v${NEW_VERSION_FULL}" >/dev/null 2>&1
+if ! GH_PAGER="" gh release -R crossplane/cli view "v${NEW_VERSION_FULL}" >/dev/null 2>&1
 then
   echo "ERROR: Version v${NEW_VERSION_FULL} was not found."
   exit 1
@@ -136,7 +136,7 @@ echo "INFO: ${FORMULA_FILE}: New version set"
 for arch in "${ARCHS[@]}"
 do
   echo "INFO: ${arch}: Getting checksum"
-  NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v${NEW_VERSION_FULL}/bundle/${arch}/crank.tar.gz.sha256")
+  NEW_SHA256=$(curl -sSL "https://cli.crossplane.io/stable/v${NEW_VERSION_FULL}/bundle/${arch}/crossplane-cli.tar.gz.sha256")
   sed -i -e "/${arch}\//{n;s/sha256 \"[^\"]*\"/sha256 \"${NEW_SHA256}\"/;}" "${FORMULA_FILE}"
   echo "INFO: ${arch}: Checksum set successfully"
 done
