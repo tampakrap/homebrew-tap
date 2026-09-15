@@ -1,28 +1,28 @@
-class Crossplane < Formula
+class CrossplaneAT24 < Formula
   desc "Build control planes without needing to write code"
   homepage "https://crossplane.io"
-  version "2.5.0"
+  version "2.4.1"
   license "Apache-2.0"
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://cli.crossplane.io/stable/v#{version}/bundle/darwin_amd64/crossplane-cli.tar.gz"
-    sha256 "bc374f915bf3420eba63f95134c9b76fee0a27434f02ee7829438d1afb036a43"
+    sha256 "9f69ee58321e2194fe48424cf1545a73a5d745fdd1a182a1d08fbcbd4a7703c0"
   end
   if OS.mac? && Hardware::CPU.arm?
     url "https://cli.crossplane.io/stable/v#{version}/bundle/darwin_arm64/crossplane-cli.tar.gz"
-    sha256 "689b9d95bd1c039cd12d59db689f4b7aa131d75db59a910c5fe81b0b199f91b0"
+    sha256 "8aba092ae6bdca9c219588331a607ce921ba50ba4d3cdb5c4676fdeb584e2628"
   end
   if OS.linux? && Hardware::CPU.intel?
     url "https://cli.crossplane.io/stable/v#{version}/bundle/linux_amd64/crossplane-cli.tar.gz"
-    sha256 "aca4392b9aeebfaa5625833b10b52ad86ce43e2f8d86119894080c37ae8b2bca"
+    sha256 "d533f5475aa1ea94f147b9abc0eda0c9575b4599cdc62f7ef25e496f2629fa07"
   end
   if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
     url "https://cli.crossplane.io/stable/v#{version}/bundle/linux_arm/crossplane-cli.tar.gz"
-    sha256 "54bd0f3fb11fef57e702f38a1bb1ede38d5f115a33358db8d96b16f8075884ed"
+    sha256 "99f071d5556ce08b291d50fdc149b8931f699fd6e6ca3b24e9341f98ceb0adf7"
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
     url "https://cli.crossplane.io/stable/v#{version}/bundle/linux_arm64/crossplane-cli.tar.gz"
-    sha256 "c46595584a4493663170cd8a2a488627318f385f1fdae0a2c5fb86d2e247a255"
+    sha256 "69efd3c4d81ffa9535334c656bbd4756a5750900df877422f3e3d2dfe82d1c0f"
   end
 
   def install
