@@ -136,7 +136,7 @@ echo "INFO: ${FORMULA_FILE}: New version set"
 for arch in "${ARCHS[@]}"
 do
   echo "INFO: ${arch}: Getting checksum"
-  NEW_SHA256=$(curl -sSL "https://releases.crossplane.io/stable/v${NEW_VERSION_FULL}/bundle/${arch}/crank.tar.gz.sha256")
+  NEW_SHA256=$(curl -sSL "https://cli.crossplane.io/stable/v${NEW_VERSION_FULL}/bundle/${arch}/crank.tar.gz.sha256")
   sed -i -e "/${arch}\//{n;s/sha256 \"[^\"]*\"/sha256 \"${NEW_SHA256}\"/;}" "${FORMULA_FILE}"
   echo "INFO: ${arch}: Checksum set successfully"
 done
