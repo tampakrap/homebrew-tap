@@ -67,16 +67,29 @@ then
   help 1
 fi
 
+NEW_VERSION_MAJOR_MINOR="${NEW_VERSION_FULL%.*}"
+NEW_VERSION_MAJOR="${NEW_VERSION_MAJOR_MINOR%%.*}"
+NEW_VERSION_MINOR="${NEW_VERSION_MAJOR_MINOR#*.}"
+
+# From v2.3.0 the CLI lives in crossplane/cli with a new URL and tarball name
+if [[ ${NEW_VERSION_MAJOR} -gt 2 ]] || { [[ ${NEW_VERSION_MAJOR} -eq 2 ]] && [[ ${NEW_VERSION_MINOR} -ge 3 ]]; }
+then
+  CLI_REPO="crossplane/cli"
+  BASE_URL="https://cli.crossplane.io/stable"
+  TARBALL_NAME="crossplane-cli.tar.gz"
+else
+  CLI_REPO="crossplane/crossplane"
+  BASE_URL="https://releases.crossplane.io/stable"
+  TARBALL_NAME="crank.tar.gz"
+fi
+
 # Check if the version exists
-if ! GH_PAGER="" gh release -R crossplane/cli view "v${NEW_VERSION_FULL}" >/dev/null 2>&1
+if ! GH_PAGER="" gh release -R "${CLI_REPO}" view "v${NEW_VERSION_FULL}" >/dev/null 2>&1
 then
   echo "ERROR: Version v${NEW_VERSION_FULL} was not found."
   exit 1
 fi
 
-NEW_VERSION_MAJOR_MINOR="${NEW_VERSION_FULL%.*}"
-NEW_VERSION_MAJOR="${NEW_VERSION_MAJOR_MINOR%%.*}"
-NEW_VERSION_MINOR="${NEW_VERSION_MAJOR_MINOR#*.}"
 if [[ ${NEW_VERSION_MAJOR_MINOR} == "${LATEST_VERSION_MAJOR_MINOR}" ]]
 then
   # Patch bump of the latest version
@@ -136,7 +149,7 @@ echo "INFO: ${FORMULA_FILE}: New version set"
 for arch in "${ARCHS[@]}"
 do
   echo "INFO: ${arch}: Getting checksum"
-  NEW_SHA256=$(curl -sSL "https://cli.crossplane.io/stable/v${NEW_VERSION_FULL}/bundle/${arch}/crossplane-cli.tar.gz.sha256")
+  NEW_SHA256=$(curl -sSL "${BASE_URL}/v${NEW_VERSION_FULL}/bundle/${arch}/${TARBALL_NAME}.sha256")
   sed -i -e "/${arch}\//{n;s/sha256 \"[^\"]*\"/sha256 \"${NEW_SHA256}\"/;}" "${FORMULA_FILE}"
   echo "INFO: ${arch}: Checksum set successfully"
 done
