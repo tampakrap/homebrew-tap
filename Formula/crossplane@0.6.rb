@@ -1,0 +1,35 @@
+class CrossplaneAT06 < Formula
+  desc "Build control planes without needing to write code"
+  homepage "https://crossplane.io"
+  version "0.6.0"
+  license "Apache-2.0"
+
+  if OS.mac? && Hardware::CPU.intel?
+    url "https://cli.crossplane.io/stable/v#{version}/bundle/darwin_amd64/crossplane-cli.tar.gz"
+    sha256 "EMPTY1"
+  end
+  if OS.mac? && Hardware::CPU.arm?
+    url "https://cli.crossplane.io/stable/v#{version}/bundle/darwin_arm64/crossplane-cli.tar.gz"
+    sha256 "EMPTY2"
+  end
+  if OS.linux? && Hardware::CPU.intel?
+    url "https://cli.crossplane.io/stable/v#{version}/bundle/linux_amd64/crossplane-cli.tar.gz"
+    sha256 "EMPTY3"
+  end
+  if OS.linux? && Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
+    url "https://cli.crossplane.io/stable/v#{version}/bundle/linux_arm/crossplane-cli.tar.gz"
+    sha256 "EMPTY4"
+  end
+  if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+    url "https://cli.crossplane.io/stable/v#{version}/bundle/linux_arm64/crossplane-cli.tar.gz"
+    sha256 "EMPTY5"
+  end
+
+  def install
+    bin.install "crossplane"
+  end
+
+  test do
+    assert_match "Client Version: v#{version}", shell_output("#{bin}/crossplane version --client")
+  end
+end
